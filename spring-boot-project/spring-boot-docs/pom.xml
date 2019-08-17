@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -88,6 +88,14 @@
 					<groupId>javax.activation</groupId>
 					<artifactId>activation</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.hamcrest</groupId>
+					<artifactId>hamcrest-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.hamcrest</groupId>
+					<artifactId>hamcrest-library</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -133,6 +141,11 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-joda</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-cbor</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -188,11 +201,6 @@
 		<dependency>
 			<groupId>com.sendgrid</groupId>
 			<artifactId>sendgrid-java</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.timgroup</groupId>
-			<artifactId>java-statsd-client</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -306,13 +314,28 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-				<groupId>io.micrometer</groupId>
-				<artifactId>micrometer-registry-wavefront</artifactId>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-wavefront</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-tools</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>io.projectreactor.netty</groupId>
 			<artifactId>reactor-netty</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>io.rsocket</groupId>
+			<artifactId>rsocket-core</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>io.rsocket</groupId>
+			<artifactId>rsocket-transport-netty</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -386,6 +409,12 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<optional>true</optional>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hamcrest</groupId>
+					<artifactId>hamcrest-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -464,6 +493,11 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-dbcp2</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -635,7 +669,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.ext</groupId>
-			<artifactId>jersey-spring4</artifactId>
+			<artifactId>jersey-spring5</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -645,7 +679,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-library</artifactId>
+			<artifactId>hamcrest</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -725,7 +759,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.infinispan</groupId>
-			<artifactId>infinispan-spring4-embedded</artifactId>
+			<artifactId>infinispan-spring5-embedded</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -1408,17 +1442,28 @@
 						<artifactId>asciidoctor-maven-plugin</artifactId>
 						<configuration>
 							<sourceDirectory>${refdocs.build.directory}</sourceDirectory>
-							<outputDirectory>${project.build.directory}/generated-docs/reference/html</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${refdocs.build.directory}</directory>
+									<excludes>
+										<exclude>**/*.*adoc</exclude>
+									</excludes>
+								</resource>
+							</resources>
 							<attributes>
-								<spring-boot-docs-version>${revision}</spring-boot-docs-version>
+								<sources-root>${project.basedir}/src</sources-root>
+								<asciidoc-sources-root>${project.basedir}/src/main/asciidoc</asciidoc-sources-root>
+								<generated-resources-root>${project.basedir}/target/generated-resources</generated-resources-root>
 								<spring-boot-repo>${spring-boot-repo}</spring-boot-repo>
+								<github-tag>${github-tag}</github-tag>
+								<jooq-version>${jooq.version}</jooq-version>
+								<spring-boot-docs-version>${revision}</spring-boot-docs-version>
+								<spring-boot-version>${revision}</spring-boot-version>
+								<spring-docs-version>${spring-framework.version}</spring-docs-version>
+								<spring-framework-version>${spring-framework.version}</spring-framework-version>
+								<spring-integration-docs-version>${spring-integration.version}</spring-integration-docs-version>
 								<spring-security-docs-version>${spring-security.version}</spring-security-docs-version>
 								<spring-webservices-docs-version>${spring-ws.version}</spring-webservices-docs-version>
-								<github-tag>${github-tag}</github-tag>
-								<spring-version>${spring.version}</spring-version>
-								<spring-docs-version>${spring.version}</spring-docs-version>
-								<spring-boot-version>${revision}</spring-boot-version>
-								<sources-root>${project.basedir}/src/</sources-root>
 							</attributes>
 						</configuration>
 						<executions>
@@ -1430,6 +1475,43 @@
 								</goals>
 								<configuration>
 									<backend>html5</backend>
+									<sourceDocumentExtensions>
+										<sourceDocumentExtension>.adoc</sourceDocumentExtension>
+										<sourceDocumentExtension>.htmladoc</sourceDocumentExtension>
+									</sourceDocumentExtensions>
+									<outputDirectory>${project.build.directory}/generated-docs/reference/html</outputDirectory>
+									<sourceHighlighter>highlight.js</sourceHighlighter>
+									<doctype>book</doctype>
+									<attributes>
+										<highlightjsdir>js/highlight</highlightjsdir>
+										<highlightjs-theme>atom-one-dark-reasonable</highlightjs-theme>
+										<linkcss>true</linkcss>
+										<imagesdir>./images</imagesdir>
+										<icons>font</icons>
+										<stylesdir>css/</stylesdir>
+										<stylesheet>spring.css</stylesheet>
+										<attribute-missing>warn</attribute-missing>
+									</attributes>
+									<logHandler>
+										<outputToConsole>true</outputToConsole>
+										<failIf>
+											<severity>DEBUG</severity>
+										</failIf>
+									</logHandler>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-htmlsingle-documentation</id>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<backend>html5</backend>
+									<sourceDocumentExtensions>
+										<sourceDocumentExtension>.htmlsingleadoc</sourceDocumentExtension>
+									</sourceDocumentExtensions>
+									<outputDirectory>${project.build.directory}/generated-docs/reference/htmlsingle</outputDirectory>
 									<sourceHighlighter>highlight.js</sourceHighlighter>
 									<doctype>book</doctype>
 									<attributes>
@@ -1441,6 +1523,28 @@
 										<stylesdir>css/</stylesdir>
 										<stylesheet>spring.css</stylesheet>
 									</attributes>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-pdf-documentation</id>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<backend>pdf</backend>
+									<sourceDocumentExtensions>
+										<sourceDocumentExtension>pdfadoc</sourceDocumentExtension>
+									</sourceDocumentExtensions>
+									<outputDirectory>${project.build.directory}/generated-docs/reference/pdf</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${refdocs.build.directory}</directory>
+											<excludes>
+												<exclude>**/*</exclude>
+											</excludes>
+										</resource>
+									</resources>
 								</configuration>
 							</execution>
 						</executions>

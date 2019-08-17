@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,18 +34,16 @@ import org.springframework.context.annotation.Configuration;
 class JerseyManagementContextConfiguration {
 
 	@Bean
-	public ServletRegistrationBean<ServletContainer> jerseyServletRegistration(
-			JerseyApplicationPath jerseyApplicationPath, ResourceConfig resourceConfig) {
+	ServletRegistrationBean<ServletContainer> jerseyServletRegistration(JerseyApplicationPath jerseyApplicationPath,
+			ResourceConfig resourceConfig) {
 		return new ServletRegistrationBean<>(new ServletContainer(resourceConfig),
 				jerseyApplicationPath.getUrlMapping());
 	}
 
 	@Bean
-	public ResourceConfig resourceConfig(
-			ObjectProvider<ResourceConfigCustomizer> resourceConfigCustomizers) {
+	ResourceConfig resourceConfig(ObjectProvider<ResourceConfigCustomizer> resourceConfigCustomizers) {
 		ResourceConfig resourceConfig = new ResourceConfig();
-		resourceConfigCustomizers.orderedStream()
-				.forEach((customizer) -> customizer.customize(resourceConfig));
+		resourceConfigCustomizers.orderedStream().forEach((customizer) -> customizer.customize(resourceConfig));
 		return resourceConfig;
 	}
 
